@@ -26,4 +26,8 @@ class HelloSpec extends FlatSpec with Matchers {
   "neighbours living cell" should "return cell empty" in {
     Hello.getLivingNeighbours(Hello.neighbours(Cell(1,1)),Cell(1,1) ).size should be (0)
   }
+
+  it should "return empty for 1 living cell space" in {
+    Hello.getLivingNeighbours(Set(Cell(1,1)), Cell(1,1) ).size should be (0)
+  }
 }
