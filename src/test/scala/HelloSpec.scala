@@ -41,7 +41,7 @@ class HelloSpec extends FlatSpec with Matchers {
       Cell(1, 2),
       Cell(2, 2)
     ))
-      nextGen.contains(Cell(1, 1)) should be(false)
+    nextGen.contains(Cell(1, 1)) should be(false)
   }
 
 }
