@@ -18,7 +18,8 @@ object Hello {
 
   def evolve(gen: Generation): Generation = (x: Int, y: Int) =>
     neighbours.count(p => gen(x + p._1, y + p._2)) match {
-      case 2 | 3 => true
+      case 2 => gen(x, y)
+      case 3 => true
       case _ => false
     }
 

@@ -63,4 +63,15 @@ class HelloSpec extends FlatSpec with Matchers {
     val result = Hello.evolve(initial)
     result(1, 1) should be(true)
   }
+
+  "dead cell with 2 neighbours" should "stay dead" in {
+    val initial = (x: Int, y: Int) => (x, y) match {
+      case (0, 1) => true
+      case (1, 2) => true
+      case _ => false
+    }
+    val result = Hello.evolve(initial)
+    result(1, 1) should be(false)
+  }
+
 }
