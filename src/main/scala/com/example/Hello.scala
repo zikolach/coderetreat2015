@@ -27,6 +27,6 @@ object Hello {
   }
 
   def getLivingNeighbours(gen: Set[Cell], cell: Cell): Set[Cell] = {
-    Set.empty
+    gen.intersect(neighbours(cell))
   }
 }
