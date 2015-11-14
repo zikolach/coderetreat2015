@@ -5,7 +5,7 @@ object Hello {
     println("Hello, world!")
   }
 
-  val range = -1 to 1
+  private val range = -1 to 1
 
   def evolve(gen: (Int, Int) => Boolean): (Int, Int) => Boolean = {
     (x: Int, y: Int) => range.flatMap(i => range.map(j => (i, j)))
