@@ -1,4 +1,5 @@
 import com.example.Hello
+import com.example.Hello.Cell
 import org.scalatest._
 
 class HelloSpec extends FlatSpec with Matchers {
@@ -12,5 +13,13 @@ class HelloSpec extends FlatSpec with Matchers {
 
   it should "return empty space for empty space" in {
     Hello.evolve(Set.empty) should be (Set.empty)
+  }
+
+  it should "return empty space for one cell" in {
+    Hello.evolve(Set { Cell(1,2) }) should be (Set.empty)
+  }
+
+  "neigbours" should "return 8 cells" in {
+    Hello.neighbours(Cell(1,1)).size should be (8)
   }
 }
