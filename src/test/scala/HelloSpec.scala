@@ -29,7 +29,7 @@ class HelloSpec extends FlatSpec with Matchers {
 
 
   "neighbours living cell" should "return 8 cells neig" in {
-    Hello.getLivingNeighbours(Hello.neighbours
+    Hello.getLivingNeighbours(Hello.neighbours(Cell(1,1)),Cell(1,1) ).size should be (8)
   }
 
   it should "return empty for 1 living cell space" in {
