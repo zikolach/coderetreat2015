@@ -7,15 +7,9 @@ object Hello {
     println("Hello, world!")
   }
 
-  case class Rect(x1: Int, y1: Int, x2: Int, y2: Int)
-
-  object Rect {
-    implicit def apply(p: (Int, Int, Int, Int)): Rect = Rect(p._1, p._2, p._3, p._4)
-  }
-
   private val range = -1 to 1
 
-  val neighbours = for {
+  private val neighbours = for {
     x <- range
     y <- range
     pos = (x, y)
@@ -24,7 +18,31 @@ object Hello {
 
   type Generation = (Int, Int) => Boolean
 
+  /**
+    * Implementation of GoL rules
+    * @param gen previos generaton
+    * @return new generation
+    */
+  def evolve(gen: Generation): Generation = (x: Int, y: Int) =>
+    neighbours.count(p => gen(x + p._1, y + p._2)) match {
+      case 2 => gen(x, y)
+      case 3 => true
+      case _ => false
+    }
+
+  // Following are utility classes
+  case class Rect(x1: Int, y1: Int, x2: Int, y2: Int)
+
+  object Rect {
+    implicit def apply(p: (Int, Int, Int, Int)): Rect = Rect(p._1, p._2, p._3, p._4)
+  }
+
   implicit class GenToSet(gen: Generation) {
+    /**
+      * Materialize generation
+      * @param rect coordinate rectangle
+      * @return set of coordinates living cells'
+      */
     def mat(rect: Rect): Set[(Int, Int)] = {
       for {
         x <- rect.x1 to rect.x2
@@ -36,6 +54,12 @@ object Hello {
   }
 
   implicit class StrToGen(str: String) {
+    /**
+      * Constructs generation from string
+      * @param dx offset x
+      * @param dy offset y
+      * @return generation
+      */
     def gen(dx: Int = 0, dy: Int = 0): Generation = { (x: Int, y: Int) =>
       val cells = str.stripMargin.split('\n').map(_.toCharArray)
       try {
@@ -47,8 +71,13 @@ object Hello {
   }
 
   implicit class GenToStr(gen: Generation) {
-    def toString(r: Rect): String = {
-      val set = gen.mat(r)
+    /**
+      * Converts generation to string
+      * @param rect rectangle
+      * @return string representation
+      */
+    def toString(rect: Rect): String = {
+      val set = gen.mat(rect)
       val xx = set.map(_._1)
       (xx.min to xx.max).map { x =>
         val yy = set.map(_._2)
@@ -62,10 +91,4 @@ object Hello {
     }
   }
 
-  def evolve(gen: Generation): Generation = (x: Int, y: Int) =>
-    neighbours.count(p => gen(x + p._1, y + p._2)) match {
-      case 2 => gen(x, y)
-      case 3 => true
-      case _ => false
-    }
 }

@@ -116,6 +116,8 @@ class HelloSpec extends FlatSpec with Matchers {
         |.....
         |.....
       """.stripMargin.gen().mat(0, 0, 4, 4))
+    val gen2 = evolve(gen1)
+    gen2.mat(0, 0, 4, 4) should be(gen0.mat(0, 0, 4, 4))
   }
 
 }
