@@ -120,4 +120,21 @@ class HelloSpec extends FlatSpec with Matchers {
     gen2.mat(0, 0, 4, 4) should be(gen0.mat(0, 0, 4, 4))
   }
 
+  "toString" should "print regarding x and y" in {
+    val mat = Set((1, 1), (1, 2), (2, 2), (3, 1))
+    val print = GenToStr(mat).toString
+    println(print)
+    print should be(
+      """x.x
+        |xx.""".stripMargin)
+  }
+
+  "mat" should "serialize regarding x and y" in {
+    val gen: Generation = (x, y) => (x, y) match {
+      case (1, 1) | (1, 2) | (2, 2) | (3, 1) => true
+      case _ => false
+    }
+
+    gen.mat(1, 1, 3, 2) should be(Set((1, 1), (1, 2), (2, 2), (3, 1)))
+  }
 }

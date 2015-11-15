@@ -1,10 +1,32 @@
 package com.example
 
 import scala.language.{implicitConversions, postfixOps}
+import scala.util.Random
 
 object Hello {
   def main(args: Array[String]): Unit = {
-    println("Hello, world!")
+    println("Game of Life - Global Day of Coderetreat 2015")
+
+    val initial: Generation = (x, y) => Random.nextBoolean()
+    var current = initial
+    var rect = Rect(-11, -2, 11, 2)
+
+    Stream.from(1).foreach(n => {
+      println(s"gen $n")
+
+      val mat = current.mat(rect)
+
+      println(GenToStr(mat).toString(alive ="O", dead = " ", sep = " "))
+
+      rect = Rect(
+        mat.map(_._1).min - 1, mat.map(_._2).min - 1,
+        mat.map(_._1).max + 1, mat.map(_._2).max + 1
+      )
+      current = evolve((x, y) => mat(x, y))
+
+      Thread.sleep(100)
+    })
+
   }
 
   private val range = -1 to 1
@@ -70,25 +92,25 @@ object Hello {
     }
   }
 
-  implicit class GenToStr(gen: Generation) {
+  implicit class GenToStr(mat: Set[(Int, Int)]) {
     /**
       * Converts generation to string
-      * @param rect rectangle
       * @return string representation
       */
-    def toString(rect: Rect): String = {
-      val set = gen.mat(rect)
-      val xx = set.map(_._1)
-      (xx.min to xx.max).map { x =>
-        val yy = set.map(_._2)
-        (yy.min to yy.max).map { y =>
-          gen(x, y) match {
-            case true => 'x'
-            case _ => '.'
+    def toString(alive: String = "x", dead: String = ".", sep: String = ""): String = {
+      val yy = mat.map(_._2)
+      (yy.min to yy.max).map { y =>
+        val xx = mat.map(_._1)
+        (xx.min to xx.max).map { x =>
+          mat.contains(x, y) match {
+            case true => s"$sep$alive$sep"
+            case _ => s"$sep$dead$sep"
           }
         } mkString
       } mkString "\n"
     }
+
+    override def toString = toString()
   }
 
 }
